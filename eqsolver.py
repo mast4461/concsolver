@@ -20,9 +20,9 @@ Kd2 = 1
 # Use the numerical solver to find the roots
 n_solutions = 200
 x_list = np.linspace(1, 2e4, n_solutions)
-F_list = np.zeros(n_solutions)
+F_list = np.empty_like(x_list)
 
-F_solution = 0.5
+F_solution = 0.5 # Actually initial guess
 for i in range(n_solutions):
 	# Redefine n1
 	n1 = x_list[i]
