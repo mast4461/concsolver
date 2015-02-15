@@ -1,46 +1,49 @@
 #!/usr/bin/python
 
+# Import librarys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 
-# Define the expression whose roots we want to find
-
+# Define parameters
 
 T = 1
 C = 1
 
-n1 = 1000
+n1 = 1100
 Kd1 = 2
 
 n2 = 1000
 Kd2 = 1
 
 
-func = lambda F : n1*C/(1+Kd1/F) + n2*C/(1+Kd2/F) - T
-
-
 # Use the numerical solver to find the roots
+n_solutions = 200
+x_list = np.linspace(1, 2e4, n_solutions)
+F_list = np.zeros(n_solutions)
 
-F_initial_guess = 0.5
-F_solution = fsolve(func, F_initial_guess)
+F_solution = 0.5
+for i in range(n_solutions):
+	# Redefine n1
+	n1 = x_list[i]
 
-print "The solution is F = %f" % F_solution
-print "at which the value of the expression is %f" % func(F_solution)
+	# Define function
+	concentration_function = lambda F : n1*C/(1+Kd1/F) + n2*C/(1+Kd2/F) - T
 
-n1_range = np.linspace(0, 100, 200)
+	# Solve numerically with the solution from previous iteration as initial guess
+	F_solution = fsolve(func=concentration_function, x0=F_solution, xtol=1e-6)
+	F_list[i] = F_solution
 
-F_initial_guess = F_solution
-for n1 in n1_range:
-	func = lambda F : n1*C/(1+Kd1/F) + n2*C/(1+Kd2/F) - T
-	F_solution = fsolve(func, F_solution)
-	print('n1: %20.8f \t\tF: %20.8f' % (n1, F_solution))
-# # Plot it
-	
-# F = np.linspace(0, 1.5, 201)
+	# Print result
+	print 'x: %20.8f \t\tF: %20.8f' % (x_list[i], F_solution)
 
-# plt.plot(F, func(F))
-# plt.xlabel("F")
-# plt.ylabel("expression value")
-# plt.grid()
-# plt.show()
+
+
+
+# Plot it
+
+plt.plot(x_list, F_list)
+plt.xlabel("x")
+plt.ylabel("F")
+plt.grid()
+plt.show()
