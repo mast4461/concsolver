@@ -1,3 +1,5 @@
+# LOL GRIEF
+
 #!/usr/bin/python
 
 import numpy as np
